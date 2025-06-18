@@ -219,4 +219,26 @@ router.get('/postagens/deletar/:id', eAdmin, (req,res) => {
     })
 })
 
+
+router.post('/update-roles', (req, res) => {
+  const roles = req.body.roles;
+
+  const updates = Object.entries(roles).map(([id, value]) => {
+    const isAdmin = value === '1';
+    return Usuario.findByIdAndUpdate(id, { eAdmin: isAdmin });
+  });
+
+  Promise.all(updates)
+    .then(() => {
+      req.flash('success_msg', 'Permissões atualizadas com sucesso!');
+      res.redirect('/admin');
+    })
+    .catch((error) => {
+      console.error(error);
+      req.flash('error_msg', 'Houve um erro interno ao salvar a alteração');
+      res.redirect('/admin');
+    });
+});
+
+
 module.exports = router
