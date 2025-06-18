@@ -6,14 +6,19 @@ const Categoria = mongoose.model('categorias')
 require('../models/Postagem')
 const Postagem = mongoose.model('postagens')
 const {eAdmin} = require('../helpers/eAdmin')
+require('../models/Usuario')
+const Usuario = mongoose.model('usuarios')
 
 router.get('/', eAdmin, (req, res) => {
-    res.render('admin/index')
+    Usuario.find().lean()
+    .then((usuario) => {
+        res.render('admin/index', {usuarios: usuario})
+    }).catch((error) => {
+        console.log(error)
+    })
 })
 
-router.get('/posts', eAdmin, (req, res) => {
-    res.send('Página de posts')
-})
+
 
 router.get('/categorias', eAdmin, (req, res) => {
     Categoria.find().sort({ date: 'desc' }).lean()
