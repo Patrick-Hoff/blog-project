@@ -1,12 +1,21 @@
 <div class="jumbotron">
-    <h3 class="display-6">{{user.nome}}</h3>
+
     <h1 class="display-4">Bem-vindo ao Blog do Node</h1>
     <p class="lead">Este é um blog simples, desenvolvido com Node.js + Express + MongoDB.</p>
     <hr class="my-4">
     <p>Aqui você vai poder ler sobre as novidades do mundo da computação.</p>
+    {{#if user}}
+    <h3>
+        Olá, sejá bem vindo(a), {{user.nome}}
+    </h3>
+    {{else}}
     <p class="lead">
-        <a class="btn btn-primary btn-lg" href="/usuarios/registro" role="button">Crie uma conta</a>
+        <a class="btn btn-primary btn-lg" href="/usuarios/login" role="button">Acessar</a>
+    <p>Login administrador: admin@admin.com</p>
+    <p>Senha: 123123</p>
     </p>
+    {{/if}}
+
 </div>
 
 <hr>

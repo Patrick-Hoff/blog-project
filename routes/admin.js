@@ -5,17 +5,17 @@ require('../models/Categoria')
 const Categoria = mongoose.model('categorias')
 require('../models/Postagem')
 const Postagem = mongoose.model('postagens')
-const {eAdmin} = require('../helpers/eAdmin')
+const { eAdmin } = require('../helpers/eAdmin')
 require('../models/Usuario')
 const Usuario = mongoose.model('usuarios')
 
 router.get('/', eAdmin, (req, res) => {
     Usuario.find().lean()
-    .then((usuario) => {
-        res.render('admin/index', {usuarios: usuario})
-    }).catch((error) => {
-        console.log(error)
-    })
+        .then((usuario) => {
+            res.render('admin/index', { usuarios: usuario })
+        }).catch((error) => {
+            console.log(error)
+        })
 })
 
 
@@ -171,7 +171,7 @@ router.get('/postagens/edit/:id', eAdmin, (req, res) => {
     Postagem.findOne({ _id: req.params.id }).lean().then((postagem) => {
 
         Categoria.find().lean().then((categorias) => {
-            res.render('admin/editpostagens', {categorias: categorias, postagem: postagem})
+            res.render('admin/editpostagens', { categorias: categorias, postagem: postagem })
         }).catch((error) => {
             req.flash('error_msg', 'Houve um erro ao listar as categorias.')
             res.redirect('/admin/postagens')
@@ -186,13 +186,13 @@ router.get('/postagens/edit/:id', eAdmin, (req, res) => {
 
 router.post('/postagem/edit', eAdmin, (req, res) => {
 
-    Postagem.findOne({_id: req.body.id}).then((postagem) => {
+    Postagem.findOne({ _id: req.body.id }).then((postagem) => {
 
         postagem.titulo = req.body.titulo,
-        postagem.slug = req.body.slug,
-        postagem.descrição = req.body.descrição
+            postagem.slug = req.body.slug,
+            postagem.descrição = req.body.descrição
         postagem.conteudo = req.body.conteudo,
-        postagem.categoria = req.body.categoria
+            postagem.categoria = req.body.categoria
 
         postagem.save().then(() => {
             req.flash('success_msg', 'Postagem editada com sucesso!')
@@ -209,8 +209,8 @@ router.post('/postagem/edit', eAdmin, (req, res) => {
 
 })
 
-router.get('/postagens/deletar/:id', eAdmin, (req,res) => {
-    Postagem.deleteOne({_id: req.params.id}).then(() => {
+router.get('/postagens/deletar/:id', eAdmin, (req, res) => {
+    Postagem.deleteOne({ _id: req.params.id }).then(() => {
         req.flash('success_msg', 'Postagem deletada com sucesso!')
         res.redirect('/admin/postagens')
     }).catch((error) => {
@@ -221,23 +221,29 @@ router.get('/postagens/deletar/:id', eAdmin, (req,res) => {
 
 
 router.post('/update-roles', (req, res) => {
-  const roles = req.body.roles;
+    const roles = req.body.roles;
 
-  const updates = Object.entries(roles).map(([id, value]) => {
-    const isAdmin = value === '1';
-    return Usuario.findByIdAndUpdate(id, { eAdmin: isAdmin });
-  });
+    if (roles['6850bb9349309d6dfc7c06e3'] !== '1') {
+        req.flash('error_msg', 'Não é possível remover a permissão do admin principal!');
+        return res.redirect('/admin');
+    }else {
 
-  Promise.all(updates)
-    .then(() => {
-      req.flash('success_msg', 'Permissões atualizadas com sucesso!');
-      res.redirect('/admin');
-    })
-    .catch((error) => {
-      console.error(error);
-      req.flash('error_msg', 'Houve um erro interno ao salvar a alteração');
-      res.redirect('/admin');
-    });
+        const updates = Object.entries(roles).map(([id, value]) => {
+            const isAdmin = value === '1';
+            return Usuario.findByIdAndUpdate(id, { eAdmin: isAdmin });
+        });
+
+        Promise.all(updates)
+            .then(() => {
+                req.flash('success_msg', 'Permissões atualizadas com sucesso!');
+                res.redirect('/admin');
+            })
+            .catch((error) => {
+                console.error(error);
+                req.flash('error_msg', 'Houve um erro interno ao salvar a alteração');
+                res.redirect('/admin');
+            });
+    }
 });
 
 
