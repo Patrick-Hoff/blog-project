@@ -4,7 +4,7 @@
   <img src="https://img.shields.io/static/v1?label=JavaScript&message=linguagem&color=yellow&style=for-the-badge&logo=javascript"/>
   <img src="https://img.shields.io/static/v1?label=Node.js&message=Back-end&color=green&style=for-the-badge&logo=node.js"/>
   <img src="https://img.shields.io/static/v1?label=MongoDB&message=Database&color=brightgreen&style=for-the-badge&logo=mongodb"/>
-  <img src="https://img.shields.io/static/v1?label=STATUS&message=EM DESENVOLVIMENTO&color=orange&style=for-the-badge"/>
+  <img src="https://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=orange&style=for-the-badge"/>
 </p>
 
 ### Tópicos 
